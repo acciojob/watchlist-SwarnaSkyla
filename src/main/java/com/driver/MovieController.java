@@ -10,6 +10,7 @@ import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
+@RequestMapping("movies")
 public class MovieController {
 
     @Autowired
