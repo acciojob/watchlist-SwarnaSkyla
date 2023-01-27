@@ -6,11 +6,18 @@ import java.util.*;
 
 @Repository
 public class MovieRepository {
-    HashMap<String,Movie> moviemap=new HashMap<>();
-    HashMap<String,Director> directormap=new HashMap<>();
-    HashMap<String, List<String>> directormoviemap=new HashMap<>();
+    private HashMap<String,Movie> moviemap;
+    private HashMap<String,Director> directormap;
+    private HashMap<String, List<String>> directormoviemap;
 
-//    Add a movie: POST /movies/add-movie
+    public MovieRepository() {
+        this.moviemap=new HashMap<String,Movie>();
+        this.directormap=new HashMap<String,Director>();
+        this.directormoviemap=new HashMap<String,List<String>>();
+
+    }
+
+    //    Add a movie: POST /movies/add-movie
 //    Pass the Movie object as request body
 //    Return success message wrapped in a ResponseEntity object
 //    Controller Name - addMovie
@@ -29,25 +36,25 @@ public class MovieRepository {
 //    Return success message wrapped in a ResponseEntity object
 //    Controller Name - addMovieDirectorPair
 
-    public String createMovieDirector(String movie,String director){
+    public void createMovieDirector(String movie,String director){
 
-        List<String> movies=directormoviemap.getOrDefault(director,new ArrayList<>());
-        if(movies.contains(movie)){
-            return "Pair Already Exists";
+        if(moviemap.containsKey(movie) && directormap.containsKey(director)){
+            moviemap.put(movie, moviemap.get(movie));
+            directormap.put(director, directormap.get(director));
+            List<String> currentMovies = new ArrayList<String>();
+            if(directormoviemap.containsKey(director)) currentMovies = directormoviemap.get(director);
+            currentMovies.add(movie);
+            directormoviemap.put(director, currentMovies);
         }
-        movies.add(movie);
-        directormoviemap.put(director,movies);
-        return "Pair Added Successfully";
     }
 //    Get Movie by movie name: GET /movies/get-movie-by-name/{name}
 //    Pass movie name as path parameter
 //    Return Movie object wrapped in a ResponseEntity object
 //    Controller Name - getMovieByName
     public Movie getMovieByName(String movie){
-        if(moviemap.containsKey(movie)){
+
             return moviemap.get(movie);
-        }
-        return null;
+
     }
 //    Get Director by director name: GET /movies/get-director-by-name/{name}
 //    Pass director name as path parameter
@@ -55,10 +62,9 @@ public class MovieRepository {
 //    Controller Name - getDirectorByName
 
     public Director getDirectorByName(String director){
-        if(directormap.containsKey(director)){
+
             return directormap.get(director);
-        }
-        return null;
+
     }
 
 //    Get List of movies name for a given director name: GET /movies/get-movies-by-director-name/{director}
@@ -78,18 +84,15 @@ public class MovieRepository {
 //    Return List of movies name(List()) wrapped in a ResponseEntity object
 //    Controller Name - findAllMovies
     public List<String> findllMovies(){
-        List<String> allmovies=new ArrayList<>();
-        for(String movie:moviemap.keySet()){
-            allmovies.add(movie);
-        }
-        return allmovies;
+
+        return new ArrayList<>(moviemap.keySet());
     }
 //    Delete a director and its movies from the records: DELETE /movies/delete-director-by-name
 //    Pass director’s name as request parameter
 //    Return success message wrapped in a ResponseEntity object
 //    Controller Name - deleteDirectorByName
 
-    public String deleteDirectorByName(String director){
+    public void deleteDirectorByName(String director){
         List<String> movie=new ArrayList<>();
         if(directormoviemap.containsKey(director)){
             movie=directormoviemap.get(director);
@@ -103,14 +106,13 @@ public class MovieRepository {
         if(directormoviemap.containsKey(director)){
             directormoviemap.remove(director);
         }
-        return "Director and their movies removed";
     }
 //    Delete all directors and all movies by them from the records: DELETE /movies/delete-all-directors
 //    No params or body required
 //    Return success message wrapped in a ResponseEntity object
 //    Controller Name - deleteAllDirectors
 
-    public String deleteAllDirectors(){
+    public void deleteAllDirectors(){
         HashSet<String> moviesSet = new HashSet<String>();
 
 
@@ -126,7 +128,7 @@ public class MovieRepository {
                 moviemap.remove(movie);
             }
         }
-        return "All director and movies deleted";
+
     }
 
 
