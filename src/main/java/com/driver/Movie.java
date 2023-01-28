@@ -9,9 +9,9 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String name, int durationInMinutes, double imdbRating) {
+    public Movie(String name, int DurationInMinutes, double imdbRating) {
         this.name = name;
-        DurationInMinutes = durationInMinutes;
+        this.DurationInMinutes = DurationInMinutes;
         this.imdbRating = imdbRating;
     }
 

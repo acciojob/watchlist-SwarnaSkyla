@@ -98,13 +98,13 @@ public class MovieRepository {
             movie=directormoviemap.get(director);
         }
         for(String m:movie){
-            if(directormoviemap.containsKey(m)){
+            if(moviemap.containsKey(m)){
                 moviemap.remove(m);
             }
         }
         directormoviemap.remove(director);
-        if(directormoviemap.containsKey(director)){
-            directormoviemap.remove(director);
+        if(directormap.containsKey(director)){
+            directormap.remove(director);
         }
     }
 //    Delete all directors and all movies by them from the records: DELETE /movies/delete-all-directors
